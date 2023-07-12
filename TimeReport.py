@@ -81,6 +81,7 @@ if os.path.isfile("./Report.xlsx"):
 			with open(path, 'wb') as file:
 			    file.write(screenshot)
 			driver.quit()
+
 			options = webdriver.ChromeOptions()
 			options.add_argument(f'--user-data-dir={RutaUserData}')
 			options.add_argument(f'--profile-directory={ProfileBluetab}')
@@ -88,17 +89,39 @@ if os.path.isfile("./Report.xlsx"):
 			actions = ActionChains(driver)
 			driver.get('https://www.google.com')
 			driver.get(f'{FolderDrive}')
+			
+			try:
+				WebDriverWait(driver, 2).until(expected_conditions.element_to_be_clickable((By.XPATH,f'//*/c-wiz[div/div/div/div/div/div[@data-tooltip="Google Drive Folder: {year}"]]')))
+			except:
+				WebDriverWait(driver, 20).until(expected_conditions.element_to_be_clickable((By.XPATH,r'//button[@guidedhelpid="new_menu_button"]')))
+				driver.find_element(By.XPATH,r'//button[@guidedhelpid="new_menu_button"]').click()
+				WebDriverWait(driver, 20).until(expected_conditions.element_to_be_clickable((By.XPATH,r'//div[div/span/div[@data-tooltip="File upload"]]')))
+				driver.find_element(By.XPATH,r'//div[div/span/div[@data-tooltip="New folder"]]').click()
+				WebDriverWait(driver, 20).until(expected_conditions.presence_of_element_located((By.XPATH,r'//input[@value="Untitled folder"]')))
+				driver.find_element(By.XPATH,r'//input[@value="Untitled folder"]').send_keys(year)
+				driver.find_element(By.XPATH,r'//button[span="Create"]').click()
 			WebDriverWait(driver, 20).until(expected_conditions.element_to_be_clickable((By.XPATH,f'//*/c-wiz[div/div/div/div/div/div[@data-tooltip="Google Drive Folder: {year}"]]')))
 			Year = driver.find_element(By.XPATH,f'//*/c-wiz[div/div/div/div/div/div[@data-tooltip="Google Drive Folder: {year}"]]')
 			Year.click()
 			time.sleep(1)
 			actions.double_click(Year).perform()
 
+			try:
+				WebDriverWait(driver, 2).until(expected_conditions.element_to_be_clickable((By.XPATH,f'//*/c-wiz[div/div/div/div/div/div[@data-tooltip="Google Drive Folder: {month}-{month_str}"]]')))
+			except:
+				WebDriverWait(driver, 20).until(expected_conditions.element_to_be_clickable((By.XPATH,r'//button[@guidedhelpid="new_menu_button"]')))
+				driver.find_element(By.XPATH,r'//button[@guidedhelpid="new_menu_button"]').click()
+				WebDriverWait(driver, 20).until(expected_conditions.element_to_be_clickable((By.XPATH,r'//div[div/span/div[@data-tooltip="File upload"]]')))
+				driver.find_element(By.XPATH,r'//div[div/span/div[@data-tooltip="New folder"]]').click()
+				WebDriverWait(driver, 20).until(expected_conditions.presence_of_element_located((By.XPATH,r'//input[@value="Untitled folder"]')))
+				driver.find_element(By.XPATH,r'//input[@value="Untitled folder"]').send_keys(f"{month}-{month_str}")
+				driver.find_element(By.XPATH,r'//button[span="Create"]').click()
 			WebDriverWait(driver, 20).until(expected_conditions.element_to_be_clickable((By.XPATH,f'//*/c-wiz[div/div/div/div/div/div[@data-tooltip="Google Drive Folder: {month}-{month_str}"]]')))
-			Year = driver.find_element(By.XPATH,f'//*/c-wiz[div/div/div/div/div/div[@data-tooltip="Google Drive Folder: {month}-{month_str}"]]')
-			Year.click()
+			Month = driver.find_element(By.XPATH,f'//*/c-wiz[div/div/div/div/div/div[@data-tooltip="Google Drive Folder: {month}-{month_str}"]]')
+			Month.click()
 			time.sleep(1)
-			actions.double_click(Year).perform()
+			actions.double_click(Month).perform()
+
 			time.sleep(1)
 			WebDriverWait(driver, 20).until(expected_conditions.element_to_be_clickable((By.XPATH,r'//button[@guidedhelpid="new_menu_button"]')))
 			driver.find_element(By.XPATH,r'//button[@guidedhelpid="new_menu_button"]').click()
@@ -112,7 +135,7 @@ if os.path.isfile("./Report.xlsx"):
 			imagen = driver.find_element(By.XPATH,f'//*/div[div/div/div/div/div[@data-tooltip="Image: {day}-{month}.png"]]').get_attribute("data-id")
 			driver.get(f'https://drive.google.com/file/d/{imagen}')
 			driver.execute_script(f"window.open('{URLSheet}', '_blank');")
-			time.sleep(1000)
+			time.sleep(120)
 		else:
 			print(f'Horas declaradas: {HorasDf.loc[0][0]}, Favor de llenar las horas y que sumen 8:00 Horas')
 			print(f'Editar el Archivo: {os.getcwd()}\Report.xlsx')
