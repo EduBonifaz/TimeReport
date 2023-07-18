@@ -1,9 +1,10 @@
 {
   "URLTimeReport": "",
-  "URLSheet": "",
+  "IDSheet": "",
   "FolderDrive": "",
   "CarpetaDescarga": "",
   "RutaUserData": "",
   "ProfileBBVA": "",
-  "ProfileBluetab": ""
+  "ProfileBluetab": "",
+  "Nombre": ""
 }
