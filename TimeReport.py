@@ -27,6 +27,7 @@ RutaUserData = config["RutaUserData"]
 ProfileBBVA = config["ProfileBBVA"]
 ProfileBluetab = config["ProfileBluetab"]
 Nombre = config["Nombre"]
+DriverPath= config["DriverPath"]
 
 key = './key.json'
 alcance = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
@@ -45,7 +46,10 @@ path = f'{CarpetaDescarga}/{day}-{month}.png'
 options = webdriver.ChromeOptions()
 options.add_argument(f'--user-data-dir={RutaUserData}')
 options.add_argument(f'--profile-directory={ProfileBBVA}')
-driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+try:
+	driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+except:
+	driver = webdriver.Chrome(service = Service(executable_path=DriverPath), options=options)
 driver.maximize_window()
 driver.get('https://www.google.com')
 driver.get(f'{URLTimeReport}')
@@ -97,7 +101,10 @@ except:
 				options = webdriver.ChromeOptions()
 				options.add_argument(f'--user-data-dir={RutaUserData}')
 				options.add_argument(f'--profile-directory={ProfileBluetab}')
-				driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+				try:
+					driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+				except:
+					driver = webdriver.Chrome(service = Service(executable_path=DriverPath), options=options)
 				actions = ActionChains(driver)
 				driver.get('https://www.google.com')
 				driver.get(f'{FolderDrive}')
